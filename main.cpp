@@ -58,15 +58,36 @@ int main() {
         return muffinOrders[rand() % muffinOrderCount];
     };
     auto randomBraceletOrder = [&]() {
-        return braceletOr
+        return braceletOrders[rand() % braceletOrderCount];
+    };
+    auto randomDonutOrder = [&]() {
+        return donutOrders[rand() % donutOrderCount];
+    };
 
+    for (int i = 0; i < 3; ++i) {
+        appendCustomer(coffeeHead, randomName(names, nameCount), randomCoffeeOrder());
+        muffinQueue.push_back({randomName(names, nameCount), randomMuffinOrder()});
+        braceletQueue.push_back({randomName(names, nameCount), randomBraceletOrder()});
+        donutQueue.push_back({randomName(names, nameCount), randomDonutOrder()});
+    }
 
+    const int rounds = 10;
+
+    int coffeeSize = 0;
+    cout << "End of Round " << round << " Queues:\n";
+    cout << " Coffee Booth Queue Size: " << coffeeSize << "\n";
+    cout << " Muffin Booth Queue Size: " << muffinQueue.size() << "\n";
+    cout << " Bracelet Booth Queue Size: " << braceletQueue.size() << "\n";
+    cout << " Donut Booth Queue Size: " << donutQueue.size() << "\n";
     return 0;
 }
 
 // Function
 
-void appendCustomer(){
+void appendCustomer(ListNode*& head, const string& name, const string& order) {
 
 }
 
+bool serveCustomer(ListNode*& head, string& servedName, string& servedOrder) {
+
+}
