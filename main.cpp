@@ -10,15 +10,20 @@ using namespace std;
 
 // For Coffee Booth (Linked List)
 struct ListNode {
-
+    string name;
+    string order;
+    ListNode* next;
 };
 
 // For Muffin, Friendship Bracelets, and Donuts booths
 struct Customer {
+    string name;
+    string order;
 };
 
 // Function Prototypes
-void appendCustomer();
+void appendCustomer(ListNode*& head, const string& name, const string& order);
+bool serveCustomer(ListNode*& head, string& servedName, string& servedOrder);
 
 
 int main() {
@@ -89,16 +94,49 @@ int main() {
             }
         }
 
+
         {
             if (!muffinQueue.empty()) {
                 Customer c = muffinQueue.front();
                 muffinQueue.pop_front();
                 cout << "[Muffin Booth] Served: " << c.name << " (" << c.order << ")\n";
             } else {
-                cout << "[Muffin Booth] No 
+                cout << "[Muffin Booth] No one served (queue empty)\n";
+            }
+
+            if (rand() % 2 == 0) {
+                muffinQueue.push_back({randomName(names, nameCount), randomMuffinOrder()});
+                cout << "[Muffin Booth] New Customer Arrived!\n";
             }
         }
+
+         if (!braceletQueue.empty()) {
+                Customer c = braceletQueue.front();
+                braceletQueue.erase(braceletQueue.begin());
+                cout << "[Bracelet Booth] Served: " << c.name << " (" << c.order << ")\n";
+            } else {
+                cout << "[Bracelet Booth] No one served (queue empty)\n";
+            }
+
+            if (rand() % 2 == 0) {
+                braceletQueue.push_back({randomName(names, nameCount), randomBraceletOrder()});
+                cout << "[Bracelet Booth] New Customer Arrived!\n";
+            }
         }
+
+        {
+            if (!donutQueue.empty()) {
+                Customer c = donutQueue.front();
+                donutQueue.pop_front();
+                cout << "[Donut Booth] Served: " << c.name << " (" << c.order << ")\n";
+            } else {
+                cout << "[Donut Booth] No one served (queue empty)\n";
+            }
+
+        }
+
+
+
 
     int coffeeSize = 0;
 
@@ -112,10 +150,26 @@ int main() {
 
 // Function
 
-void appendCustomer(ListNode*& head, const string& name, const string& order) {
 
+void appendCustomer(ListNode*& head, const string& name, const string& order) {
+    ListNode* newNode = new ListNode{name, order, nullptr};
+    if (!head) {
+        head = newNode;
+    } else {
+        ListNode* temp = head;
+        while (temp->next)
+            temp = temp->next;
+        temp->next = newNode;
+    }
 }
 
 bool serveCustomer(ListNode*& head, string& servedName, string& servedOrder) {
-
+    if (!head) return false;
+    ListNode* temp = head;
+    head = head->next;
+    servedName = temp->name;
+    servedOrder = temp->order;
+    delete temp;
+    return true;
 }
+
