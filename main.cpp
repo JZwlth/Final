@@ -47,7 +47,20 @@ int main() {
     // Donut Booth: list
     list<Customer> donutQueue;
 
-    
+    auto randomName = [&](const string arr[], int size) {
+        return arr[rand() % size];
+    };
+
+    auto randomCoffeeOrder = [&]() {
+        return coffeeOrders[rand() % coffeeOrderCount];
+    };
+    auto randomMuffinOrder = [&]() {
+        return muffinOrders[rand() % muffinOrderCount];
+    };
+    auto randomBraceletOrder = [&]() {
+        return braceletOr
+
+
     return 0;
 }
 
