@@ -8,6 +8,8 @@
 
 using namespace std;
 
+// Data Structures Required
+
 // For Coffee Booth (Linked List)
 struct ListNode {
     string name;
@@ -25,24 +27,27 @@ struct Customer {
 void appendCustomer(ListNode*& head, const string& name, const string& order);
 bool serveCustomer(ListNode*& head, string& servedName, string& servedOrder);
 
-
+// Main Function
 int main() {
-    srand((unsigned)time(nullptr)); 
-    const string names[] = {};
+    srand((unsigned)time(nullptr)); // Random
+
+    // Names and orders for randomization
+    const string names[] = {"Alice", "Bob", "Charlie", "Diana", "Ethan", "Fiona", "George", "Hannah"};
     const int nameCount = sizeof(names)/sizeof(names[0]);
 
-    const string coffeeOrders[] = {"l", "c", "a", "e", "m"};
+    const string coffeeOrders[] = {"Latte", "Cappuccino", "Americano", "Espresso", "Mocha"};
     const int coffeeOrderCount = sizeof(coffeeOrders)/sizeof(coffeeOrders[0]);
 
-    const string muffinOrders[] = {"b", "c", "b", "l"};
+    const string muffinOrders[] = {"Blueberry Muffin", "Chocolate Muffin", "Bran Muffin", "Lemon Muffin"};
     const int muffinOrderCount = sizeof(muffinOrders)/sizeof(muffinOrders[0]);
 
-    const string braceletOrders[] = {"bb", "ff", "c v", "ww"};
+    const string braceletOrders[] = {"Beaded Bracelet", "Friendship Band", "Charm Bracelet", "Woven Bracelet"};
     const int braceletOrderCount = sizeof(braceletOrders)/sizeof(braceletOrders[0]);
 
-    const string donutOrders[] = {"ga", "cs", "sd", "as"};
+    const string donutOrders[] = {"Glazed Donut", "Chocolate Donut", "Jelly Donut", "Boston Creme"};
     const int donutOrderCount = sizeof(donutOrders)/sizeof(donutOrders[0]);
 
+    // Initialize
     // Coffee Booth: Linked List
     ListNode* coffeeHead = nullptr;
     // Muffin Booth: deque
@@ -52,6 +57,7 @@ int main() {
     // Donut Booth: list
     list<Customer> donutQueue;
 
+    // Get a random name and order from arrays
     auto randomName = [&](const string arr[], int size) {
         return arr[rand() % size];
     };
@@ -69,6 +75,7 @@ int main() {
         return donutOrders[rand() % donutOrderCount];
     };
 
+    // Initialize each booth with 3 customers
     for (int i = 0; i < 3; ++i) {
         appendCustomer(coffeeHead, randomName(names, nameCount), randomCoffeeOrder());
         muffinQueue.push_back({randomName(names, nameCount), randomMuffinOrder()});
@@ -76,9 +83,12 @@ int main() {
         donutQueue.push_back({randomName(names, nameCount), randomDonutOrder()});
     }
 
+    // Simulation
     const int rounds = 10;
-        for (int round = 1; round <= rounds; ++round) {
-        cout << "\n=== ROUND " << round << " =\n";
+    for (int round = 1; round <= rounds; ++round) {
+        cout << "\n=== ROUND " << round << " ===\n";
+
+        // Coffee Booth
         {
             string servedName, servedOrder;
             bool served = serveCustomer(coffeeHead, servedName, servedOrder);
@@ -94,7 +104,7 @@ int main() {
             }
         }
 
-
+        // Muffin Booth
         {
             if (!muffinQueue.empty()) {
                 Customer c = muffinQueue.front();
@@ -110,7 +120,9 @@ int main() {
             }
         }
 
-         if (!braceletQueue.empty()) {
+        // Bracelet Booth
+        {
+            if (!braceletQueue.empty()) {
                 Customer c = braceletQueue.front();
                 braceletQueue.erase(braceletQueue.begin());
                 cout << "[Bracelet Booth] Served: " << c.name << " (" << c.order << ")\n";
@@ -124,6 +136,7 @@ int main() {
             }
         }
 
+        // Donut Booth
         {
             if (!donutQueue.empty()) {
                 Customer c = donutQueue.front();
@@ -133,23 +146,40 @@ int main() {
                 cout << "[Donut Booth] No one served (queue empty)\n";
             }
 
+            if (rand() % 2 == 0) {
+                donutQueue.push_back({randomName(names, nameCount), randomDonutOrder()});
+                cout << "[Donut Booth] New Customer Arrived!\n";
+            }
         }
 
+        // Print queue sizes
+        int coffeeSize = 0;
+        {
+            ListNode* temp = coffeeHead;
+            while (temp) {
+                coffeeSize++;
+                temp = temp->next;
+            }
+        }
 
+        cout << "End of Round " << round << " Queues:\n";
+        cout << " Coffee Booth Queue Size: " << coffeeSize << "\n";
+        cout << " Muffin Booth Queue Size: " << muffinQueue.size() << "\n";
+        cout << " Bracelet Booth Queue Size: " << braceletQueue.size() << "\n";
+        cout << " Donut Booth Queue Size: " << donutQueue.size() << "\n";
+    }
 
+    // Clean list
+    while (coffeeHead) {
+        ListNode* temp = coffeeHead;
+        coffeeHead = coffeeHead->next;
+        delete temp;
+    }
 
-    int coffeeSize = 0;
-
-    cout << "End of Round " << round << " Queues:\n";
-    cout << " Coffee Booth Queue Size: " << coffeeSize << "\n";
-    cout << " Muffin Booth Queue Size: " << muffinQueue.size() << "\n";
-    cout << " Bracelet Booth Queue Size: " << braceletQueue.size() << "\n";
-    cout << " Donut Booth Queue Size: " << donutQueue.size() << "\n";
     return 0;
 }
 
-// Function
-
+// Function Definitions
 
 void appendCustomer(ListNode*& head, const string& name, const string& order) {
     ListNode* newNode = new ListNode{name, order, nullptr};
@@ -172,4 +202,3 @@ bool serveCustomer(ListNode*& head, string& servedName, string& servedOrder) {
     delete temp;
     return true;
 }
-
