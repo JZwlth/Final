@@ -72,8 +72,36 @@ int main() {
     }
 
     const int rounds = 10;
+        for (int round = 1; round <= rounds; ++round) {
+        cout << "\n=== ROUND " << round << " =\n";
+        {
+            string servedName, servedOrder;
+            bool served = serveCustomer(coffeeHead, servedName, servedOrder);
+            if (served) {
+                cout << "[Coffee Booth] Served: " << servedName << " (" << servedOrder << ")\n";
+            } else {
+                cout << "[Coffee Booth] No one served (queue empty)\n";
+            }
+
+            if (rand() % 2 == 0) {
+                appendCustomer(coffeeHead, randomName(names, nameCount), randomCoffeeOrder());
+                cout << "[Coffee Booth] New Customer Arrived!\n";
+            }
+        }
+
+        {
+            if (!muffinQueue.empty()) {
+                Customer c = muffinQueue.front();
+                muffinQueue.pop_front();
+                cout << "[Muffin Booth] Served: " << c.name << " (" << c.order << ")\n";
+            } else {
+                cout << "[Muffin Booth] No 
+            }
+        }
+        }
 
     int coffeeSize = 0;
+
     cout << "End of Round " << round << " Queues:\n";
     cout << " Coffee Booth Queue Size: " << coffeeSize << "\n";
     cout << " Muffin Booth Queue Size: " << muffinQueue.size() << "\n";
